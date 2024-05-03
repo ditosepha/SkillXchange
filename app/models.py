@@ -9,8 +9,10 @@ class CustomUser(AbstractUser):
     )
     
     role = models.CharField(max_length=20, choices=ROLES)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+
+    USERNAME_FIELD = 'username'
 
 class SkillClass(models.Model):
     title = models.CharField(max_length=200)

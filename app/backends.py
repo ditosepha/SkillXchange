@@ -1,6 +1,10 @@
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework.authtoken.models import Token
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import CustomUser
 
 class CustomUserBackend(BaseBackend):
     def authenticate(self, request, username=None, password=None):
@@ -8,7 +12,10 @@ class CustomUserBackend(BaseBackend):
         try:
             user = User.objects.get(Q(username=username) | Q(email=username))
             if user.check_password(password):
-                return user
+                if hasattr(user, 'role') and user.role:
+                    return user
+                elif not hasattr(user, 'role'):
+                    return user
         except User.DoesNotExist:
             return None
 
@@ -18,3 +25,10 @@ class CustomUserBackend(BaseBackend):
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
+
+
+@receiver(post_save, sender=CustomUser)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created and not Token.objects.filter(user=instance).exists():
+        Token.objects.create(user=instance)
+    print(f"Signal receiver triggered for user {instance.username} created={created}")
