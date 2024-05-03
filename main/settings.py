@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SkillXchange',
+        'NAME': 'SkillxChange',
         'USER': 'postgres',
         'PASSWORD': 'KqeEW23',
         'HOST': 'localhost',  
@@ -138,3 +138,9 @@ REST_FRAMEWORK = {
     ],
 }
 
+AUTH_USER_MODEL = 'app.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    'app.backends.CustomUserBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
