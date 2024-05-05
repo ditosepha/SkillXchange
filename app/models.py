@@ -35,3 +35,6 @@ class Review(models.Model):
     skill_class = models.ForeignKey(SkillClass, related_name='reviews', on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=3, decimal_places=1)
     comment = models.TextField()
+
+    class Meta:
+        unique_together = ('student', 'skill_class')
