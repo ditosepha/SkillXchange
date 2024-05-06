@@ -21,6 +21,10 @@ class SkillClass(models.Model):
     running_times = models.CharField(max_length=150)
     max_students = models.PositiveIntegerField()
 
+    def clean(self):
+        if self.max_students < 0:
+            raise ValidationError("Max students must be a positive integer.")
+
 class Enrollment(models.Model):
     student = models.ForeignKey(CustomUser, related_name='enrollments', on_delete=models.CASCADE)
     skill_class = models.ForeignKey(SkillClass, related_name='enrollments', on_delete=models.CASCADE)
