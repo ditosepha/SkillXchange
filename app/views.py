@@ -2,11 +2,14 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from .models import *
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 from .permissions import *
 from django.core.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from .filters import SkillClassFilterSet
         
 class UserViewSet(ModelViewSet):
     queryset = CustomUser.objects.all()
@@ -17,6 +20,8 @@ class SkillClassViewSet(ModelViewSet):
     queryset = SkillClass.objects.all()
     serializer_class = SkillClassSerializer
     permission_classes = [IsTutorOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ["title", "description", "max_students"]
 
     def perform_create(self, serializer):
         serializer.save(tutor=self.request.user)
