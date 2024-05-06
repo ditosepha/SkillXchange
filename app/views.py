@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-from .filters import SkillClassFilterSet
         
 class UserViewSet(ModelViewSet):
     queryset = CustomUser.objects.all()
